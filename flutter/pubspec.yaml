@@ -1,0 +1,38 @@
+name: pocket
+description: "Pamela’s Pocket"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  go_router: ^18.1.4
+  http: ^1.6.0
+  image_picker: ^1.2.4
+  path_provider: ^2.1.6
+  qr_flutter: ^4.1.0
+  shared_preferences: ^2.5.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  image_picker_platform_interface: ^2.11.2
+
+flutter:
+  uses-material-design: true
+
+  # Bundled so titles never fall back to the platform serif (SIL OFL, see OFL.txt).
+  fonts:
+    - family: Literata
+      fonts:
+        - asset: assets/fonts/Literata-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Literata-SemiBold.ttf
+          weight: 600

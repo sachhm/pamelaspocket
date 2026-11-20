@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Page ivory, so launch matches the first Flutter frame. -->
+    <color name="ivory">#F8F9F0</color>
+</resources>

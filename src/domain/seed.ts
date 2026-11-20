@@ -1,0 +1,368 @@
+import {
+  AccessState,
+  Attachment,
+  DiaryEntry,
+  EntryKind,
+  Escalation,
+  Known,
+  MessageSource,
+  PocketState,
+  QuestionState,
+  Reminder,
+  RequestKind,
+  Role,
+  StorySection,
+  Thread,
+  VoiceNote,
+  When,
+} from "@/src/domain/types"
+
+function at(dayOffset: number, hour: number, minute: number, seq: number): When {
+  return { dayOffset, hour, minute, seq }
+}
+
+const breakfast: DiaryEntry = {
+  id: "entry-breakfast",
+  kind: EntryKind.General,
+  body: "Pamela slept through the night. Porridge with honey at breakfast, and tea with milk. She was cheerful.",
+  authorName: "Jordan",
+  authorRole: Role.Staff,
+  when: at(0, 8, 10, 1),
+  attachment: Attachment.None,
+    voice: VoiceNote.None,
+    fileIds: [],
+  question: null,
+}
+
+const phone: DiaryEntry = {
+  id: "entry-phone",
+  kind: EntryKind.Mood,
+  body: "A phone rang in the lounge and she became upset. I stepped outside and told her first. She settled.",
+  authorName: "Jordan",
+  authorRole: Role.Staff,
+  when: at(0, 9, 40, 2),
+  attachment: Attachment.None,
+    voice: VoiceNote.None,
+    fileIds: [],
+  question: null,
+}
+
+const garden: DiaryEntry = {
+  id: "entry-garden",
+  kind: EntryKind.Moment,
+  body: "She hummed along to Vera Lynn while we watered the herbs.",
+  authorName: "Alex",
+  authorRole: Role.Owner,
+  when: at(0, 11, 15, 3),
+  attachment: Attachment.None,
+    voice: VoiceNote.None,
+    fileIds: [],
+  question: null,
+}
+
+const lift: DiaryEntry = {
+  id: "entry-lift",
+  kind: EntryKind.Important,
+  body: "GP visit is coming up. She needs a lift and likes to leave with time to spare.",
+  authorName: "Sam",
+  authorRole: Role.Staff,
+  when: at(-1, 16, 5, 4),
+  attachment: Attachment.None,
+    voice: VoiceNote.None,
+    fileIds: [],
+  question: null,
+}
+
+const cushion: DiaryEntry = {
+  id: "entry-cushion",
+  kind: EntryKind.Question,
+  body: "Has the new cushion arrived for her chair?",
+  authorName: "Chris",
+  authorRole: Role.Family,
+  when: at(0, 12, 5, 5),
+  attachment: Attachment.None,
+    voice: VoiceNote.None,
+    fileIds: [],
+  question: QuestionState.Open,
+}
+
+// Offsets, not fixed dates, so Today stays today whenever the demo is opened.
+export function createSeed(): PocketState {
+  return {
+    tick: 20,
+    access: AccessState.Active,
+    handover:
+      "Pamela slept well and ate porridge with honey this morning. A phone call in the lounge upset her. Stepping outside, after telling her first, settled her. She has a GP visit coming up and will need a lift.",
+    nextVisit:
+      "Spare clothes are in the hall cupboard, second shelf. Give her time before leaving the house. She likes the radio low.",
+    familyStatus:
+      "Pamela had a gentle morning. A phone call unsettled her, then the garden settled her again.",
+    people: [
+      { name: "Alex", role: Role.Owner },
+      { name: "Jordan", role: Role.Staff },
+      { name: "Sam", role: Role.Staff },
+      { name: "Chris", role: Role.Family },
+    ],
+    entries: [cushion, garden, phone, breakfast, lift],
+    prompts: [
+      {
+        id: "grew-up",
+        section: StorySection.Life,
+        ask: "Where did Pamela grow up?",
+        answer: "Fremantle, in a weatherboard house near the harbour.",
+        year: "1948",
+      },
+      {
+        id: "work",
+        section: StorySection.Life,
+        ask: "What did she do for work?",
+        answer: "Primary school teacher for thirty years.",
+        year: "1966",
+      },
+      {
+        id: "milestones",
+        section: StorySection.Life,
+        ask: "What are the important milestones?",
+        answer: "Married David in 1968. Alex and Chris came along. She moved to the hills after she retired.",
+        year: "1968",
+      },
+      {
+        id: "people",
+        section: StorySection.Life,
+        ask: "Who are the significant people in her life?",
+        answer: "David, who died in 2019. Alex most days, Chris on weekends, and Joan next door with the lemons.",
+        year: "",
+      },
+      {
+        id: "proud",
+        section: StorySection.Life,
+        ask: "What is she proud of?",
+        answer: "The school garden she started, and raising her children.",
+        year: "1996",
+      },
+      {
+        id: "stories",
+        section: StorySection.Life,
+        ask: "What stories does she like to tell?",
+        answer: "The class rabbit that escaped on sports day. She laughs at the same line every time.",
+        year: "",
+      },
+      {
+        id: "laugh",
+        section: StorySection.Personality,
+        ask: "What makes her laugh?",
+        answer: "Silly mix-ups, and that rabbit story.",
+        year: "",
+      },
+      {
+        id: "music",
+        section: StorySection.Personality,
+        ask: "What music, television, or activities does she enjoy?",
+        answer: "Vera Lynn, the ABC in the morning, and watering the herbs.",
+        year: "",
+      },
+      {
+        id: "comfort",
+        section: StorySection.Personality,
+        ask: "What makes her feel comfortable?",
+        answer: "Her own mug, a warm rug, and someone sitting nearby without rushing.",
+        year: "",
+      },
+      {
+        id: "dislike",
+        section: StorySection.Personality,
+        ask: "What does she dislike?",
+        answer: "Phones in front of her, being hurried, and a loud television.",
+        year: "",
+      },
+      {
+        id: "phrases",
+        section: StorySection.Personality,
+        ask: "What familiar phrases does she use?",
+        answer: "\"We'll get there.\" and \"Cup of tea first.\"",
+        year: "",
+      },
+      {
+        id: "herself",
+        section: StorySection.Personality,
+        ask: "What makes her feel like herself?",
+        answer: "Talking about the garden, as a teacher rather than a patient.",
+        year: "",
+      },
+      {
+        id: "good-day",
+        section: StorySection.Routines,
+        ask: "What does a good day look like?",
+        answer: "Slow breakfast, the radio low, a walk to the letterbox, then the herbs if the weather is kind.",
+        year: "",
+      },
+      {
+        id: "hard-day",
+        section: StorySection.Routines,
+        ask: "What does a difficult day look like?",
+        answer: "Noise, surprise visitors, and a morning out of order.",
+        year: "",
+      },
+      {
+        id: "distress",
+        section: StorySection.Routines,
+        ask: "What situations cause distress or confusion?",
+        answer: "A phone in the room, being left without a word, or a rush to the car.",
+        year: "",
+      },
+      {
+        id: "helps",
+        section: StorySection.Routines,
+        ask: "What usually helps?",
+        answer: "Explain before leaving. Step outside for calls. One step at a time.",
+        year: "",
+      },
+      {
+        id: "not-worked",
+        section: StorySection.Routines,
+        ask: "What approaches have not worked?",
+        answer: "Sharp corrections, calls taken in front of her, and turning the television up.",
+        year: "",
+      },
+      {
+        id: "spoken",
+        section: StorySection.Routines,
+        ask: "How does she prefer to be spoken to?",
+        answer: "Calm, adult, and unhurried. Include her in the decision.",
+        year: "",
+      },
+    ],
+    works: [
+      {
+        id: "phone-calls",
+        situation: "Becomes upset when someone uses their phone.",
+        helps: "Step outside to take calls and explain calmly before leaving.",
+        hinders: "Taking calls directly in front of her.",
+        observations: ["Jordan: Stepping into the hall and saying \"I'll be two minutes\" worked this morning."],
+        pattern: "When a phone call upsets Pamela, leaving the room after a short explanation has helped.",
+      },
+      {
+        id: "leaving",
+        situation: "Gets anxious when it is time to go out.",
+        helps: "Lay the coat out early and say where you are going, once.",
+        hinders: "Repeating the plan many times, or rushing her to the car.",
+        observations: [],
+        pattern: "",
+      },
+    ],
+    messages: [
+      {
+        id: "note-clothes",
+        thread: Thread.Care,
+        source: MessageSource.Person,
+        author: "Jordan",
+        body: "Where are the spare clothes?",
+        when: at(0, 8, 20, 6),
+        known: null,
+        escalation: null,
+        asked: null,
+      },
+      {
+        id: "note-clothes-ai",
+        thread: Thread.Care,
+        source: MessageSource.Ai,
+        author: "Pocket",
+        body: "Spare clothes are in the hall cupboard, on the second shelf.",
+        when: at(0, 8, 20, 7),
+        known: Known.Yes,
+        escalation: null,
+        asked: "Where are the spare clothes?",
+      },
+      {
+        id: "note-cardigan",
+        thread: Thread.Care,
+        source: MessageSource.Person,
+        author: "Alex",
+        body: "Thanks. The blue cardigan is the one she asks for.",
+        when: at(0, 8, 32, 8),
+        known: null,
+        escalation: null,
+        asked: null,
+      },
+      {
+        id: "note-guide",
+        thread: Thread.Guide,
+        source: MessageSource.Ai,
+        author: "Pocket",
+        body: "This space is just for you. It is not medical advice, and nothing you write here is added to the shared diary.",
+        when: at(0, 7, 0, 9),
+        known: null,
+        escalation: null,
+        asked: null,
+      },
+    ],
+    requests: [
+      {
+        id: "help-appointment",
+        kind: RequestKind.Appointment,
+        text: "Can someone take Mum to her appointment?",
+        acceptedBy: null,
+      },
+      {
+        id: "help-visit",
+        kind: RequestKind.Visit,
+        text: "Who can visit this weekend?",
+        acceptedBy: null,
+      },
+      {
+        id: "help-script",
+        kind: RequestKind.Prescription,
+        text: "Can someone collect a prescription?",
+        acceptedBy: "Chris",
+      },
+    ],
+    appointments: [
+      {
+        id: "appt-gp",
+        when: at(3, 10, 30, 10),
+        place: "Hills Medical",
+        reason: "Routine check",
+        transport: "Lift there and back",
+        notes: "She likes to arrive early.",
+        reminder: Reminder.On,
+        volunteer: null,
+      },
+      {
+        id: "appt-hair",
+        when: at(12, 14, 0, 11),
+        place: "Marie in town",
+        reason: "Haircut",
+        transport: "Chris usually drives",
+        notes: "Afternoon, after lunch.",
+        reminder: Reminder.Off,
+        volunteer: "Chris",
+      },
+    ],
+    reports: [
+      {
+        id: "report-nurse",
+        when: at(-6, 11, 0, 12),
+        author: "Priya Shah",
+        title: "Nurse visit",
+        note: "Home visit after a restless night.",
+        original:
+          "Visit completed at the home. Pamela was unsettled on arrival and settled after a cup of tea and a quiet chat about the garden. No wounds. Family to continue the usual morning routine. Follow-up in four weeks.",
+        summary:
+          "The nurse visited Pamela at home. She was unsettled at first, then settled with tea and a chat about the garden. There were no wounds. Keep the usual morning routine. The next visit is in four weeks.",
+        fileId: null,
+      },
+      {
+        id: "report-gp",
+        when: at(-20, 9, 30, 13),
+        author: "Dr Nguyen",
+        title: "Clinic letter",
+        note: "After the last clinic visit.",
+        original:
+          "Seen in clinic with her daughter. The current home routine can continue. A review was suggested in six months, sooner if the family is worried.",
+        summary:
+          "The clinic said to keep the current home routine. They suggested another visit in six months, or sooner if the family is worried.",
+        fileId: null,
+      },
+    ],
+  }
+}
